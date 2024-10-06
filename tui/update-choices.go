@@ -1,6 +1,10 @@
 package tui
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	"slices"
+
+	tea "github.com/charmbracelet/bubbletea"
+)
 
 func updateChoices(msg tea.Msg, m Model) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
@@ -17,7 +21,17 @@ func updateChoices(msg tea.Msg, m Model) (tea.Model, tea.Cmd) {
 				m.Choice = 0
 			}
 		case "enter":
-			return m, tea.Quit
+			if slices.Contains(m.Selected, m.Choice) {
+				for i, choice := range m.Selected {
+					if choice == m.Choice {
+						m.Selected = append(m.Selected[:i], m.Selected[i+1:]...)
+						break
+					}
+				}
+			} else {
+				m.Selected = append(m.Selected, m.Choice)
+			}
+
 		}
 
 	}

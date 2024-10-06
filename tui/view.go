@@ -11,7 +11,7 @@ func (m Model) View() string {
 		return "\n  See you later!\n\n"
 	}
 
-	s = views.ChoicesView(m.Choice)
+	s = views.ChoicesView(m.Choice,m.Selected)
 
 	return styles.MainStyle.Render("\n" + s + "\n\n")
 }

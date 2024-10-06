@@ -6,7 +6,7 @@ import (
 	"vinash/tui/styles"
 )
 
-func ChoicesView(choice int) string {
+func ChoicesView(choice int, selected []int) string {
 	c := choice
 
 	tpl := "Select Process to kill\n\n"
@@ -18,7 +18,7 @@ func ChoicesView(choice int) string {
 	procesess = procesess[:20]
 	choices := fmt.Sprintf(
 		"%s\n",
-		ProcessView(procesess, c),
+		ProcessView(procesess, c,selected),
 	)
 
 	return fmt.Sprintf(tpl, choices)
