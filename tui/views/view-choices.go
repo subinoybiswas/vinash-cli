@@ -16,7 +16,7 @@ func generateIndexFrmTab(tab int) int {
 func makeTabBar(tab int, total int) string {
 	return fmt.Sprintf("\nPage %d/%d\n", tab, (total / 10))
 }
-func ChoicesView(choice int, selected []int, procesess []process.Process, tab int, width int) string {
+func ChoicesView(choice int, selected []int, procesess []process.Process, tab int, width int, showDetails bool) string {
 	c := choice
 	finalHeading := styles.TitleStyle.Render("Vinash-CLI")
 	tpl := finalHeading + "\n"
@@ -44,12 +44,15 @@ func ChoicesView(choice int, selected []int, procesess []process.Process, tab in
 		details.State,
 	)
 	var choices string
-	renderInfoText := styles.InfoStyle.Render(infoText)
+	renderInfoText := styles.InfoStyle.Width(width/2 - 5).Render(infoText)
 	choices = fmt.Sprintf(
 		"%s",
 		ProcessView(procesess[generateIndexFrmTab(tab):generateIndexFrmTab(tab)+10], c, selected, tab),
 	)
 	detailsSection := lipgloss.JoinHorizontal(lipgloss.Top, choices, renderInfoText)
-
-	return fmt.Sprintf(tpl, detailsSection)
+	if showDetails {
+		return fmt.Sprintf(tpl, detailsSection)
+	} else {
+		return fmt.Sprintf(tpl, choices)
+	}
 }

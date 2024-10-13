@@ -40,7 +40,12 @@ func updateChoices(msg tea.Msg, m Model) (tea.Model, tea.Cmd) {
 				m.Tab = len(m.Processess) / 10
 			}
 			m.Choice = (m.Tab - 1) * 10
-
+		case "tab":
+			if m.ShowDetails{
+				m.ShowDetails = false
+			}else{
+				m.ShowDetails = true
+			}
 		case " ":
 			if slices.Contains(m.Selected, m.Choice) {
 				for i, choice := range m.Selected {
