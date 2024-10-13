@@ -23,7 +23,7 @@ func updateChoices(msg tea.Msg, m Model) (tea.Model, tea.Cmd) {
 				m.Choice = 0
 			}
 		case "l", "right":
-			if m.Tab >= len(m.Processess)/10  {
+			if m.Tab >= len(m.Processess)/10 {
 				m.Tab = 1
 			} else {
 				m.Tab++
@@ -60,6 +60,9 @@ func updateChoices(msg tea.Msg, m Model) (tea.Model, tea.Cmd) {
 		processess, _ := process.GetProcesses()
 		m.Processess = processess
 		return m, tickAfter(time.Second)
+	case tea.WindowSizeMsg:
+		m.Width = msg.Width 
+		m.Height = msg.Height 
 
 	}
 

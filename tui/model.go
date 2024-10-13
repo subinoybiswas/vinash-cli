@@ -8,4 +8,6 @@ type Model struct {
 	Quitting   bool
 	Processess []process.Process
 	Tab        int
+	Height     int
+	Width      int
 }

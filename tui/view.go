@@ -14,7 +14,7 @@ func (m Model) View() string {
 		return out
 	}
 
-	s = views.ChoicesView(m.Choice, m.Selected, m.Processess, m.Tab)
+	s = views.ChoicesView(m.Choice, m.Selected, m.Processess, m.Tab, m.Width)
 
-	return styles.MainStyle.Render("\n" + s + "\n\n")
+	return styles.MainStyle.Width(m.Width).Render("\n" + s + "\n\n")
 }
