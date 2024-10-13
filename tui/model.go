@@ -7,4 +7,5 @@ type Model struct {
 	Selected   []int
 	Quitting   bool
 	Processess []process.Process
+	Tab        int
 }
