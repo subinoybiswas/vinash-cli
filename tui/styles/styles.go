@@ -22,10 +22,16 @@ var (
 				MarginLeft(1).
 				MarginRight(1).
 				MarginBottom(1).
-				
 				Padding(0, 1).
 				Italic(true).
 				Foreground(lipgloss.Color("#FFF7DB")).Background(lipgloss.Color("#F25D94"))
+	InfoStyle = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#00FF00")).
+			Background(lipgloss.Color("#3A3A3A")).
+			Padding(1, 2).
+			Bold(true).
+			BorderStyle(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("228")).Align(lipgloss.Center, lipgloss.Center).MarginLeft(2).Height(8)
 )
 
 func Rainbow(base lipgloss.Style, s string, colors []color.Color) string {

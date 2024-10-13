@@ -13,26 +13,34 @@ func updateChoices(msg tea.Msg, m Model) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "j", "down":
-			m.Choice++
-			if m.Choice > 9 {
-				m.Choice = 0
+			if m.Choice < len(m.Processess)-1 {
+				m.Choice++
 			}
+			if m.Choice >= m.Tab*10 {
+				m.Choice = m.Tab*10 - 1
+			}
+
 		case "k", "up":
-			m.Choice--
-			if m.Choice < 0 {
-				m.Choice = 0
+			if m.Choice > 0 {
+				m.Choice--
 			}
+
 		case "l", "right":
-			if m.Tab >= len(m.Processess)/10 {
-				m.Tab = 1
-			} else {
+			if m.Tab < len(m.Processess)/10 {
 				m.Tab++
+			} else {
+				m.Tab = 1
 			}
+			m.Choice = (m.Tab - 1) * 10
+
 		case "h", "left":
-			m.Tab--
-			if m.Tab < 1 {
+			if m.Tab > 1 {
+				m.Tab--
+			} else {
 				m.Tab = len(m.Processess) / 10
 			}
+			m.Choice = (m.Tab - 1) * 10
+
 		case " ":
 			if slices.Contains(m.Selected, m.Choice) {
 				for i, choice := range m.Selected {
@@ -44,6 +52,7 @@ func updateChoices(msg tea.Msg, m Model) (tea.Model, tea.Cmd) {
 			} else {
 				m.Selected = append(m.Selected, m.Choice)
 			}
+
 		case "enter":
 			if len(m.Selected) > 0 {
 				toBeKilled := []string{}
@@ -56,13 +65,14 @@ func updateChoices(msg tea.Msg, m Model) (tea.Model, tea.Cmd) {
 			m.Quitting = true
 			return m, tea.Quit
 		}
+
 	case tickMsg:
 		processess, _ := process.GetProcesses()
 		m.Processess = processess
 		return m, tickAfter(time.Second)
 	case tea.WindowSizeMsg:
-		m.Width = msg.Width 
-		m.Height = msg.Height 
+		m.Width = msg.Width
+		m.Height = msg.Height
 
 	}
 

@@ -2,10 +2,11 @@ package views
 
 import (
 	"fmt"
+	"log"
 	"vinash/process"
 	"vinash/tui/styles"
-	// "github.com/charmbracelet/lipgloss"
-	// "github.com/muesli/gamut"
+
+	"github.com/charmbracelet/lipgloss"
 )
 
 func generateIndexFrmTab(tab int) int {
@@ -16,11 +17,9 @@ func makeTabBar(tab int, total int) string {
 	return fmt.Sprintf("\nPage %d/%d\n", tab, (total / 10))
 }
 func ChoicesView(choice int, selected []int, procesess []process.Process, tab int, width int) string {
-	// blends := gamut.Blends(lipgloss.Color("#F25D94"), lipgloss.Color("#EDFF82"), 50)
 	c := choice
-	// heading := styles.Rainbow(lipgloss.NewStyle(), "Vinash-CLI\n", blends)
 	finalHeading := styles.TitleStyle.Render("Vinash-CLI")
-	tpl := finalHeading+"\n"
+	tpl := finalHeading + "\n"
 	tpl += "%s"
 	tpl += makeTabBar(tab, len(procesess))
 	tpl += styles.SubtleStyle.Render("j/k, up/down: select") + styles.DotStyle +
@@ -29,10 +28,28 @@ func ChoicesView(choice int, selected []int, procesess []process.Process, tab in
 		styles.SubtleStyle.Render("space: choose") + styles.DotStyle +
 		styles.SubtleStyle.Render("q, esc: quit")
 
-	choices := fmt.Sprintf(
-		"%s",
-		ProcessView(procesess[generateIndexFrmTab(tab):generateIndexFrmTab(tab)+10], c, selected),
+	pid := procesess[choice].Pid
+	details, err := process.GetDetails(pid)
+	if err != nil {
+		log.Fatalf("Error getting process details: %v", err)
+	}
+	infoText := fmt.Sprintf(
+		"PID: %s\nCommand: %s\nMemory: %.2f%%\nCPU: %.2f%%\nUID: %s\nGID: %s\nState: %s",
+		details.PID,
+		details.Command,
+		details.Memory,
+		details.CPU,
+		details.UID,
+		details.GID,
+		details.State,
 	)
+	var choices string
+	renderInfoText := styles.InfoStyle.Render(infoText)
+	choices = fmt.Sprintf(
+		"%s",
+		ProcessView(procesess[generateIndexFrmTab(tab):generateIndexFrmTab(tab)+10], c, selected, tab),
+	)
+	detailsSection := lipgloss.JoinHorizontal(lipgloss.Top, choices, renderInfoText)
 
-	return fmt.Sprintf(tpl, choices)
+	return fmt.Sprintf(tpl, detailsSection)
 }
